@@ -1,0 +1,47 @@
+@startuml
+
+left to right direction
+
+actor User
+actor Customer
+actor Receptionist
+actor Manager
+
+rectangle "Hotel Reservation System" {
+
+    usecase "Browse rooms" as UC1
+    usecase "View room information" as UC2
+
+    usecase "Make reservation" as UC3
+    usecase "View reservation" as UC4
+    usecase "Cancel reservation" as UC5
+    usecase "Make payment" as UC6
+
+    usecase "Manage reservations" as UC7
+    usecase "Manage room availability" as UC8
+
+    usecase "Manage rooms" as UC9
+    usecase "Manage prices" as UC10
+    usecase "Manage hotel information" as UC11
+}
+
+User --> UC1
+User --> UC2
+
+Customer --> UC1
+Customer --> UC2
+Customer --> UC3
+Customer --> UC4
+Customer --> UC5
+Customer --> UC6
+
+Receptionist --> UC7
+Receptionist --> UC8
+
+Manager --> UC7
+Manager --> UC8
+Manager --> UC9
+Manager --> UC10
+Manager --> UC11
+
+@enduml

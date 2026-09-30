@@ -1,0 +1,26 @@
+@startuml
+
+actor Customer
+participant "Web App" as App
+participant "Reservation API" as API
+database Database as DB
+participant "Payment Service" as Payment
+
+Customer -> App: Search rooms
+App -> API: Check availability
+API -> DB: Check room availability
+DB --> API: Available rooms
+API --> App: Available rooms
+App --> Customer: Display available rooms
+
+Customer -> App: Make reservation
+App -> API: Create reservation
+API -> DB: Save reservation
+
+API -> Payment: Process payment
+Payment --> API: Payment result
+
+API --> App: Booking confirmation
+App --> Customer: Display confirmation
+
+@enduml
