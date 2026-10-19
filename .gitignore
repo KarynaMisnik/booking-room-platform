@@ -1,0 +1,19 @@
+
+# Visual Studio
+.vs/
+
+# Dependencies
+frontend/node_modules/
+
+# Build output
+frontend/dist/
+backend/bin/
+backend/obj/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
