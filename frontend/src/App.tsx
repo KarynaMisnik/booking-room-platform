@@ -13,7 +13,7 @@ function App() {
     const [error, setError] = useState('')
 
     useEffect(() => {
-        fetch('http://localhost:5076/api/rooms')
+        fetch('http://localhost:5000/api/rooms')
             .then((response) => {
                 if (!response.ok) {
                     throw new Error('Failed to fetch rooms')
