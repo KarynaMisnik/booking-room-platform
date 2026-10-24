@@ -23,3 +23,6 @@ npm.cmd run dev
 ```
 
 > Expected address: http://localhost:5173 See: <code>vite.config.ts</code>
+
+Backend requires database provider or other related dependecies. After ```pull request``` you need to run ```dotnet restore``` or ```dotnet build```.
+.NET reads the project file and downloads the required package for her environment.
