@@ -38,31 +38,13 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// seed code
+// data called from Data.DbInitializer.cs
 
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-    if (!db.Rooms.Any())
-    {
-        db.Rooms.AddRange(
-            new Room
-            {
-                Name = "Standard Room",
-                Price = 89.00m,
-                Capacity = 2
-            },
-            new Room
-            {
-                Name = "Deluxe Room",
-                Price = 129.00m,
-                Capacity = 3
-            }
-        );
-
-        db.SaveChanges();
-    }
+    await DbInitializer.InitializeAsync(db);
 }
 
 app.Run();
