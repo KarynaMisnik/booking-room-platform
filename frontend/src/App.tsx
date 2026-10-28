@@ -33,7 +33,7 @@ function App() {
             {rooms.map((room) => (
                 <article key={room.id}>
                     <h2>{room.name}</h2>
-                    <p>Price per night: €{room.price}</p>
+                    <p>Price per night: â‚¬{room.price}</p>
                     <p>Capacity: {room.capacity} guests</p>
                 </article>
             ))}

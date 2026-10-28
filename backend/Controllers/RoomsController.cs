@@ -1,6 +1,7 @@
-﻿
+﻿using backend.Data;
 using backend.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers;
 
@@ -8,14 +9,17 @@ namespace backend.Controllers;
 [Route("api/[controller]")]
 public class RoomsController : ControllerBase
 {
-    [HttpGet]
-    public ActionResult<IEnumerable<Room>> GetRooms()
+    private readonly AppDbContext _context;
+
+    public RoomsController(AppDbContext context)
     {
-        var rooms = new List<Room>
-        {
-            new Room { Id = 1, Name = "Standard Room", Price = 89.00m, Capacity = 2 },
-            new Room { Id = 2, Name = "Deluxe Room", Price = 129.00m, Capacity = 3 }
-        };
+        _context = context;
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Room>>> GetRooms()
+    {
+        var rooms = await _context.Rooms.ToListAsync();
 
         return Ok(rooms);
     }

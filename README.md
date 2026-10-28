@@ -2,12 +2,27 @@
 
 A room booking system built as a DevOps course project, focusing on software development, automation, deployment, and infrastructure.
 
-## UML
+### To start the project, follow these steps:
 
-<h3>Use Case Diagram</h3>
+**Backend — ASP.NET Core**
 
-![Use Case Diagram](docs/uml/use-case-diagram.png)
+```c#
+cd C:\booking-room-platform\backend
+dotnet run --no-launch-profile
+```
 
-<h3>Sequence Diagram</h3>
+> Expected address: http://localhost:5000 See: <code>Program.cs</code>
 
-![Sequence Diagram](docs/uml/sequence-diagram.png)
+Rooms API: http://localhost:5000/api/rooms
+
+**Frontend — React + Vite**
+
+```c#
+cd C:\booking-room-platform\frontend
+npm.cmd run dev
+```
+
+> Expected address: http://localhost:5173 See: <code>vite.config.ts</code>
+
+Backend requires database provider or other related dependecies. After ```pull request``` you need to run ```dotnet restore``` or ```dotnet build```.
+.NET reads the project file and downloads the required package for the environment.

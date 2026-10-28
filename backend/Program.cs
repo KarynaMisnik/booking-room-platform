@@ -1,4 +1,11 @@
-var builder = WebApplication.CreateBuilder(args);
+using backend.Data;
+using Microsoft.EntityFrameworkCore;
+using backend.Models;
+
+var builder = WebApplication.CreateBuilder(args); // Data registration
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite("Data Source=hotelbooking.db"));
+builder.WebHost.UseUrls("http://localhost:5000");
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("Frontend", policy =>
@@ -30,5 +37,14 @@ app.UseCors("Frontend");
 app.UseAuthorization();
 
 app.MapControllers();
+
+// data called from Data.DbInitializer.cs
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+    await DbInitializer.InitializeAsync(db);
+}
 
 app.Run();
