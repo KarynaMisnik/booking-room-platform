@@ -1,0 +1,13 @@
+# Compiled .NET files
+bin/
+obj/
+
+# Local SQLite database
+*.db
+*.db-shm
+*.db-wal
+
+# Git and editor files
+.git/
+.vs/
+.vscode/
