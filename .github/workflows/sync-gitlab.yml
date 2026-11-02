@@ -1,0 +1,30 @@
+name: Sync GitHub to GitLab
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout GitHub repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Push changes to GitLab
+        env:
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+        run: |
+          git -c http.extraheader="Authorization: Basic $(printf 'oauth2:%s' "$GITLAB_TOKEN" | base64 -w0)" \
+            push https://gitlab.com/glitches2/booking-room-platform.git \
+            HEAD:refs/heads/main
