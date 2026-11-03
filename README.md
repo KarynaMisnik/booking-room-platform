@@ -27,5 +27,10 @@ npm.cmd run dev
 Backend requires database provider or other related dependecies. After ```pull request``` you need to run ```dotnet restore``` or ```dotnet build```.
 .NET reads the project file and downloads the required package for the environment.
 
+**Development Workflow**
 
-test
+The project uses GitHub Actions to automatically build the ASP.NET Core backend and React frontend. 
+Changes to the protected main branch are introduced through pull requests. 
+After merging, GitHub Actions synchronizes the updated branch with GitLab.
+
+See `docs/ci-cd.md` for implementation details.
