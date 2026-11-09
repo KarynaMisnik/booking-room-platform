@@ -12,3 +12,15 @@ services:
       - "8080:80"
     depends_on:
       - backend
+
+  db:
+    image: postgres:18
+    environment:
+      POSTGRES_DB: hotelbooking
+      POSTGRES_USER: hoteluser
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    volumes:
+      - postgres_data:/var/lib/postgresql
+
+volumes:
+  postgres_data:
