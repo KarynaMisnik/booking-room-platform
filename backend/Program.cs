@@ -4,7 +4,8 @@ using backend.Models;
 
 var builder = WebApplication.CreateBuilder(args); // Data registration
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite("Data Source=hotelbooking.db"));
+    options.UseNpgsql(
+        builder.Configuration.GetConnectionString("DefaultConnection")));
 if (string.IsNullOrEmpty(
     Environment.GetEnvironmentVariable("ASPNETCORE_URLS")))
 {
