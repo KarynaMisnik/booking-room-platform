@@ -110,5 +110,3 @@ The `main` branch is protected by repository rules.
 Changes must be introduced through Pull Requests, and the required CI checks must pass before merging.
 
 This helps prevent untested changes from entering the main branch.
-
-test
