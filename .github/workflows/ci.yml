@@ -11,28 +11,28 @@ on:
 permissions:
   contents: read
 
-jobs:
-  backend:
+jobs: # collection of steps executed by a GitHub Actions runner
+  backend: # checks whether ASP.NET Core application builds
     name: Build ASP.NET Core Backend
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest # a temporary environment
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4 # downloads the relevant version of repository into the runner's workspace
 
       - name: Set up .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v4 # ensures that .NET SDK 10 is available in the runner
         with:
-          dotnet-version: '10.0.x'
-
-      - name: Restore dependencies
-        run: dotnet restore
-        working-directory: ./backend
+          dotnet-version: '10.0.x' # Passes configuration to the action and requests a a compatible .NET 10 SDK
+         # uses - executes a reusable GitHub Action, run - shell command, eg. dotnet build
+      - name: Restore dependencies # 
+        run: dotnet restore # reads the project file and ensures the required NuGet packages are available
+        working-directory: ./backend 
 
       - name: Build backend
-        run: dotnet build --no-restore
+        run: dotnet build --no-restore # compiles application, checks whether code can be successfully built (syntax, classes)
         working-directory: ./backend
-  frontend:
+  frontend: # checks whether React application builds
     name: Build React Frontend
     runs-on: ubuntu-latest
 
