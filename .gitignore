@@ -7,8 +7,8 @@ frontend/node_modules/
 
 # Build output
 frontend/dist/
-backend/bin/
-backend/obj/
+**/bin/
+**/obj/
 
 # Environment variables and secrets
 .env
@@ -17,3 +17,4 @@ backend/obj/
 
 # Logs
 *.log
+
