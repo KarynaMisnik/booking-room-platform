@@ -32,6 +32,8 @@ jobs: # collection of steps executed by a GitHub Actions runner
       - name: Build backend
         run: dotnet build --no-restore # compiles application, checks whether code can be successfully built (syntax, classes)
         working-directory: ./backend
+      - name: Run backend unit tests 
+        run: dotnet test tests/Backend.Tests/Backend.Tests.csproj --configuration Release 
   frontend: # checks whether React application builds
     name: Build React Frontend
     runs-on: ubuntu-latest
