@@ -1,10 +1,12 @@
 using backend.Data;
 using Microsoft.EntityFrameworkCore;
 using backend.Models;
+using backend.Services;
 
 var builder = WebApplication.CreateBuilder(args); // Data registration
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite("Data Source=hotelbooking.db"));
+    options.UseNpgsql(
+        builder.Configuration.GetConnectionString("DefaultConnection")));
 if (string.IsNullOrEmpty(
     Environment.GetEnvironmentVariable("ASPNETCORE_URLS")))
 {
@@ -22,6 +24,8 @@ builder.Services.AddCors(options =>
 });
 // Add services to the container.
 
+builder.Services.AddScoped<BookingValidator>();
+builder.Services.AddScoped<BookingService>();
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
