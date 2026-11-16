@@ -7,7 +7,9 @@ public class Booking
 {
     public int Id { get; set; }
 
-    public int RoomId { get; set; }
+    public int RoomId { get; set; }  // Foreign key, ID of the room associated with the booking
+
+    public Room Room { get; set; } = null!; // Navigation property
 
     public string GuestName { get; set; } = "";
 

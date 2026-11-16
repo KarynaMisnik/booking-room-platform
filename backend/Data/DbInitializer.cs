@@ -27,5 +27,49 @@ public static class DbInitializer
         }
 
         await db.SaveChangesAsync();
+
+        // Seed sample bookings only when the database has no bookings
+        if (!await db.Bookings.AnyAsync())
+        {
+            var today = DateTime.UtcNow.Date;
+
+            var standardRoom = await db.Rooms.SingleAsync(r => r.Name == "Standard Room");
+            var deluxeRoom = await db.Rooms.SingleAsync(r => r.Name == "Deluxe Room");
+            var familyRoom = await db.Rooms.SingleAsync(r => r.Name == "Family Room");
+
+            var bookings = new List<Booking>
+    {
+        new Booking
+        {
+            RoomId = standardRoom.Id,
+            GuestName = "Alice Johnson",
+            GuestEmail = "alice@example.com",
+            CheckIn = today.AddDays(2),
+            CheckOut = today.AddDays(5),
+            Status = "Confirmed"
+        },
+        new Booking
+        {
+            RoomId = deluxeRoom.Id,
+            GuestName = "Michael Brown",
+            GuestEmail = "michael@example.com",
+            CheckIn = today.AddDays(4),
+            CheckOut = today.AddDays(7),
+            Status = "Pending"
+        },
+        new Booking
+        {
+            RoomId = familyRoom.Id,
+            GuestName = "Emma Wilson",
+            GuestEmail = "emma@example.com",
+            CheckIn = today.AddDays(8),
+            CheckOut = today.AddDays(12),
+            Status = "Cancelled"
+        }
+    };
+
+            db.Bookings.AddRange(bookings);
+            await db.SaveChangesAsync();
+        }
     }
 }

@@ -52,8 +52,12 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-    await db.Database.MigrateAsync();
-    await DbInitializer.InitializeAsync(db);
+    await db.Database.MigrateAsync(); // runs in every environment.
+
+    if (app.Environment.IsDevelopment()) // runs only in Development
+    {
+        await DbInitializer.InitializeAsync(db);
+    }
 }
 
 app.Run();
