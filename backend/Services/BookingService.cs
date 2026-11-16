@@ -30,6 +30,19 @@ public class BookingService
             throw new KeyNotFoundException("Room not found.");
         }
 
+        bool hasOverlap = await _db.Bookings.AnyAsync(existing =>
+            existing.RoomId == booking.RoomId &&
+            existing.Status != "Cancelled" &&
+            booking.CheckIn < existing.CheckOut &&
+            booking.CheckOut > existing.CheckIn
+        );
+
+        if (hasOverlap)
+        {
+            throw new InvalidOperationException(
+                "This room is already booked for the selected dates.");
+        }
+
         _db.Bookings.Add(booking);
         await _db.SaveChangesAsync();
 
