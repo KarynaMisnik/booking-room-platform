@@ -17,6 +17,15 @@ The project uses a React frontend, an ASP.NET Core REST API, and a PostgreSQL da
   - [Repository Setup](#repository-setup)
   - [Development Workflow](#development-workflow)
   - [Branch Protection](#branch-protection)
+- [Local Development Setup](#local-development-setup)
+  - [Prerequisites](#prerequisites)
+  - [1. Clone the repository](#clone-the-repository)
+  - [2. Configure environment variables](#configure-environment-variables)
+  - [3. Start the application](#start-the-application)
+  - [4. Access the application](#access-the-application)
+  - [5. Verify the containers](#verify-the-containers)
+  - [6. Stop the application](#stop-the-application)
+  - [Database persistence](#database-persistence)
 
 ## Technology Stack
 
@@ -110,3 +119,97 @@ The `main` branch is protected by repository rules.
 Changes must be introduced through Pull Requests, and the required CI checks must pass before merging.
 
 This helps prevent untested changes from entering the main branch.
+
+## Local Development Setup
+
+The Hotel Booking Platform uses Docker Compose to run the frontend, backend, and PostgreSQL database.
+
+### Prerequisites
+
+- Docker Engine
+- Docker Compose
+
+No separate PostgreSQL installation is required.
+
+### 1. Clone the repository
+
+Clone the repository and navigate to the project root.
+
+### 2. Configure environment variables
+
+Create a `.env` file in the project root, next to `compose.yaml`.
+
+Add:
+
+```env
+POSTGRES_PASSWORD=your_local_password
+```
+
+Replace `your_local_password` with your own password.
+
+**Important:** Do not commit `.env` to Git. It contains database credentials.
+
+### 3. Start the application
+
+From the project root, run:
+
+```bash
+docker compose up -d --build
+```
+
+Docker Compose starts three services:
+
+| Service  | Description                       | Port            |
+| -------- | --------------------------------- | --------------- |
+| frontend | React application served by NGINX | 8080            |
+| backend  | ASP.NET Core Web API              | 5000            |
+| db       | PostgreSQL 18 database            | 5432 (internal) |
+
+The backend waits until PostgreSQL passes its health check before starting.
+
+### 4. Access the application
+
+After the containers start:
+
+- **Frontend:** `http://localhost:8080`
+- **Backend API:** `http://localhost:5000/api/rooms`
+
+The backend connects to PostgreSQL using the Docker Compose service name `db`.
+
+Database migrations and initial data seeding are handled automatically when the backend starts.
+
+### 5. Verify the containers
+
+```bash
+docker compose ps
+```
+
+All three services should be running.
+
+To view logs:
+
+```bash
+docker compose logs backend
+```
+
+### 6. Stop the application
+
+```bash
+docker compose down
+```
+
+This stops and removes the containers while preserving database data in the named Docker volume.
+
+To restart the application:
+
+```bash
+docker compose up -d
+```
+
+### Database persistence
+
+PostgreSQL data is stored in the `postgres_data` Docker volume.
+
+The data persists when containers are stopped or recreated.
+
+**Warning:** Running `docker compose down -v` also removes the database volume and deletes the stored database data.
