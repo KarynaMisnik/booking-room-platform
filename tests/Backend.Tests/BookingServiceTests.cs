@@ -175,4 +175,228 @@ public class BookingServiceTests
 
         Assert.Empty(await db.Bookings.ToListAsync());
     }
+
+    // prevent overlapping booking
+    [Fact]
+    public async Task CreateBookingAsync_OverlappingDates_RejectsBooking()
+    {
+        // Arrange
+        using var connection = new SqliteConnection("Data Source=:memory:");
+        await connection.OpenAsync();
+
+        var options = new DbContextOptionsBuilder<AppDbContext>()
+            .UseSqlite(connection)
+            .Options;
+
+        await using var db = new AppDbContext(options);
+        await db.Database.EnsureCreatedAsync();
+
+        db.Rooms.Add(new Room
+        {
+            Id = 1,
+            Name = "Standard Room",
+            Price = 80,
+            Capacity = 2
+        });
+
+        db.Bookings.Add(new Booking
+        {
+            RoomId = 1,
+            GuestName = "Alice",
+            GuestEmail = "alice@example.com",
+            CheckIn = new DateTime(2026, 12, 10, 0, 0, 0, DateTimeKind.Utc),
+            CheckOut = new DateTime(2026, 12, 15, 0, 0, 0, DateTimeKind.Utc),
+            Status = "Confirmed"
+        });
+
+        await db.SaveChangesAsync();
+
+        var service = new BookingService(db, new BookingValidator());
+
+        var newBooking = new Booking
+        {
+            RoomId = 1,
+            GuestName = "Bob",
+            GuestEmail = "bob@example.com",
+            CheckIn = new DateTime(2026, 12, 12, 0, 0, 0, DateTimeKind.Utc),
+            CheckOut = new DateTime(2026, 12, 17, 0, 0, 0, DateTimeKind.Utc)
+        };
+
+        // Act & Assert
+        await Assert.ThrowsAsync<InvalidOperationException>(
+            () => service.CreateBookingAsync(newBooking));
+
+        Assert.Equal(1, await db.Bookings.CountAsync());
+    }
+
+    // test that adjacent bookings are allowed
+    [Fact]
+    public async Task CreateBookingAsync_AdjacentDates_AllowsBooking()
+    {
+        // Arrange
+        using var connection = new SqliteConnection("Data Source=:memory:");
+        await connection.OpenAsync();
+
+        var options = new DbContextOptionsBuilder<AppDbContext>()
+            .UseSqlite(connection)
+            .Options;
+
+        await using var db = new AppDbContext(options);
+        await db.Database.EnsureCreatedAsync();
+
+        db.Rooms.Add(new Room
+        {
+            Id = 1,
+            Name = "Standard Room",
+            Price = 80,
+            Capacity = 2
+        });
+
+        db.Bookings.Add(new Booking
+        {
+            RoomId = 1,
+            GuestName = "Alice",
+            GuestEmail = "alice@example.com",
+            CheckIn = new DateTime(2026, 12, 10, 0, 0, 0, DateTimeKind.Utc),
+            CheckOut = new DateTime(2026, 12, 15, 0, 0, 0, DateTimeKind.Utc),
+            Status = "Confirmed"
+        });
+
+        await db.SaveChangesAsync();
+
+        var service = new BookingService(db, new BookingValidator());
+
+        var newBooking = new Booking
+        {
+            RoomId = 1,
+            GuestName = "Bob",
+            GuestEmail = "bob@example.com",
+            CheckIn = new DateTime(2026, 12, 15, 0, 0, 0, DateTimeKind.Utc),
+            CheckOut = new DateTime(2026, 12, 17, 0, 0, 0, DateTimeKind.Utc)
+        };
+
+        // Act
+        var result = await service.CreateBookingAsync(newBooking);
+
+        // Assert
+        Assert.True(result.Id > 0);
+        Assert.Equal(2, await db.Bookings.CountAsync());
+    }
+
+    // verify that two different rooms can be booked for the same dates
+    [Fact]
+    public async Task CreateBookingAsync_DifferentRooms_AllowsBooking()
+    {
+        // Arrange
+        using var connection = new SqliteConnection("Data Source=:memory:");
+        await connection.OpenAsync();
+
+        var options = new DbContextOptionsBuilder<AppDbContext>()
+            .UseSqlite(connection)
+            .Options;
+
+        await using var db = new AppDbContext(options);
+        await db.Database.EnsureCreatedAsync();
+
+        db.Rooms.Add(new Room
+        {
+            Id = 1,
+            Name = "Standard Room",
+            Price = 80,
+            Capacity = 2
+        });
+
+        db.Bookings.Add(new Booking
+        {
+            RoomId = 1,
+            GuestName = "Alice",
+            GuestEmail = "alice@example.com",
+            CheckIn = new DateTime(2026, 12, 10, 0, 0, 0, DateTimeKind.Utc),
+            CheckOut = new DateTime(2026, 12, 15, 0, 0, 0, DateTimeKind.Utc),
+            Status = "Confirmed"
+        });
+
+        db.Rooms.Add(new Room
+        {
+            Id = 2,
+            Name = "Deluxe Room",
+            Price = 120,
+            Capacity = 2
+        });
+
+        await db.SaveChangesAsync();
+
+        var service = new BookingService(db, new BookingValidator());
+
+        var newBooking = new Booking
+        {
+            RoomId = 2,
+            GuestName = "Bob",
+            GuestEmail = "bob@example.com",
+            CheckIn = new DateTime(2026, 12, 12, 0, 0, 0, DateTimeKind.Utc),
+            CheckOut = new DateTime(2026, 12, 17, 0, 0, 0, DateTimeKind.Utc)
+        };
+
+        // Act
+        var result = await service.CreateBookingAsync(newBooking);
+
+        // Assert
+        Assert.True(result.Id > 0);
+        Assert.Equal(2, await db.Bookings.CountAsync());
+    }
+
+    // test cancelled bookings: cancelled booking should not block another guest from booking the same room for the same dates
+    [Fact]
+    public async Task CreateBookingAsync_CancelledBooking_AllowsBooking()
+    {
+        // Arrange
+        using var connection = new SqliteConnection("Data Source=:memory:");
+        await connection.OpenAsync();
+
+        var options = new DbContextOptionsBuilder<AppDbContext>()
+            .UseSqlite(connection)
+            .Options;
+
+        await using var db = new AppDbContext(options);
+        await db.Database.EnsureCreatedAsync();
+
+        db.Rooms.Add(new Room
+        {
+            Id = 1,
+            Name = "Standard Room",
+            Price = 80,
+            Capacity = 2
+        });
+
+        db.Bookings.Add(new Booking
+        {
+            RoomId = 1,
+            GuestName = "Alice",
+            GuestEmail = "alice@example.com",
+            CheckIn = new DateTime(2026, 12, 10, 0, 0, 0, DateTimeKind.Utc),
+            CheckOut = new DateTime(2026, 12, 15, 0, 0, 0, DateTimeKind.Utc),
+            Status = "Cancelled"
+        });
+
+        await db.SaveChangesAsync();
+
+        var service = new BookingService(db, new BookingValidator());
+
+        var newBooking = new Booking
+        {
+            RoomId = 1,
+            GuestName = "Bob",
+            GuestEmail = "bob@example.com",
+            CheckIn = new DateTime(2026, 12, 12, 0, 0, 0, DateTimeKind.Utc),
+            CheckOut = new DateTime(2026, 12, 17, 0, 0, 0, DateTimeKind.Utc)
+        };
+
+        // Act
+        var result = await service.CreateBookingAsync(newBooking);
+
+        // Assert
+        Assert.True(result.Id > 0);
+        Assert.Equal(2, await db.Bookings.CountAsync());
+    }
+
 }
