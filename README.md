@@ -27,6 +27,7 @@ The project uses a React frontend, an ASP.NET Core REST API, and a PostgreSQL da
   - [6. Stop the application](#6-stop-the-application)
   - [Database persistence](#database-persistence)
 - [Docker Hub — Development Workflow Demonstration](#docker-hub-development-workflow-demonstration)
+- [Docker Compose — Workflow Demonstration](#docker-compose-workflow-demonstration)
 
 ## Technology Stack
 
@@ -218,3 +219,7 @@ The data persists when containers are stopped or recreated.
 ## Docker Hub — Development Workflow Demonstration
 
 - [Docker Hub Demonstration Guide](Docker-demo.md)
+
+## Docker Compose — Workflow Demonstration
+
+## - [Docker Compose Demonstration Guide](DockerCompose.md)

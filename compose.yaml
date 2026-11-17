@@ -1,13 +1,17 @@
 services:
   backend:
-    build:
+    build: 
+    # builds image via Dockerfile
       context: ./backend
     ports:
       - "5000:8080"
+      # maps a container port to computer
     environment:
+    # provides configuration, including database connection settings
      ASPNETCORE_ENVIRONMENT: Development
      ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Database=hotelbooking;Username=hoteluser;Password=${POSTGRES_PASSWORD}"
     depends_on:
+    # controls service startup order
      db:
       condition: service_healthy 
 
@@ -26,8 +30,10 @@ services:
       POSTGRES_USER: hoteluser
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
     volumes:
+    # preserves database data when containers are removed
       - postgres_data:/var/lib/postgresql
     healthcheck:
+    # checks whether PostgreSQL is ready to accept connections
      test: ["CMD-SHELL", "pg_isready -U hoteluser -d hotelbooking"]
      interval: 5s
      timeout: 5s
