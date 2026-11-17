@@ -19,13 +19,14 @@ The project uses a React frontend, an ASP.NET Core REST API, and a PostgreSQL da
   - [Branch Protection](#branch-protection)
 - [Local Development Setup](#local-development-setup)
   - [Prerequisites](#prerequisites)
-  - [1. Clone the repository](#clone-the-repository)
-  - [2. Configure environment variables](#configure-environment-variables)
-  - [3. Start the application](#start-the-application)
-  - [4. Access the application](#access-the-application)
-  - [5. Verify the containers](#verify-the-containers)
-  - [6. Stop the application](#stop-the-application)
+  - [1. Clone the repository](#1-clone-the-repository)
+  - [2. Configure environment variables](#2-configure-environment-variables)
+  - [3. Start the application](#3-start-the-application)
+  - [4. Access the application](#4-access-the-application)
+  - [5. Verify the containers](#5-verify-the-containers)
+  - [6. Stop the application](#6-stop-the-application)
   - [Database persistence](#database-persistence)
+- [Docker Hub — Development Workflow Demonstration](#docker-hub-development-workflow-demonstration)
 
 ## Technology Stack
 
@@ -213,3 +214,7 @@ PostgreSQL data is stored in the `postgres_data` Docker volume.
 The data persists when containers are stopped or recreated.
 
 **Warning:** Running `docker compose down -v` also removes the database volume and deletes the stored database data.
+
+## Docker Hub — Development Workflow Demonstration
+
+- [Docker Hub Demonstration Guide](Docker-demo.md)
