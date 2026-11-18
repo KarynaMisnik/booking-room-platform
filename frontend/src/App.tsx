@@ -1,44 +1,33 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import BookingForm from "./components/BookingForm";
-
-type Room = {
-  id: number;
-  name: string;
-  price: number;
-  capacity: number;
-};
+import RoomCard from "./components/RoomCard";
+import { getRooms, type Room } from "./services/api";
 
 function App() {
   const [rooms, setRooms] = useState<Room[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/rooms")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to fetch rooms");
-        }
-        return response.json();
-      })
-      .then((data: Room[]) => setRooms(data))
-      .catch(() => setError("Could not load rooms from the backend"));
+    getRooms()
+      .then(setRooms)
+      .catch(() => setError("Could not load rooms from the backend"))
+      .finally(() => setIsLoading(false));
   }, []);
 
   return (
-    <main>
-      <h1>Hotel Rooms</h1>
-
-      {error && <p>{error}</p>}
-
-      {rooms.map((room) => (
-        <article key={room.id}>
-          <h2>{room.name}</h2>
-          <p>Price per night: €{room.price}</p>
-          <p>Capacity: {room.capacity} guests</p>
-          <BookingForm roomId={room.id} />
-        </article>
-      ))}
+    <main className="app-main" aria-busy={isLoading}>
+      <header className="page-header">
+        <p className="page-header__eyebrow">Find your stay</p>
+        <h1>Hotel Rooms</h1>
+        <p>Choose a comfortable room for your next stay.</p>
+      </header>
+      {isLoading && <p className="loading-state" role="status"><span className="spinner" aria-hidden="true" />Loading rooms...</p>}
+      {error && <p role="alert">{error}</p>}
+      {!isLoading && !error && rooms.length === 0 && <p>No rooms available.</p>}
+      <section className="rooms-grid" aria-label="Available hotel rooms">
+        {rooms.map((room) => <RoomCard key={room.id} room={room} />)}
+      </section>
     </main>
   );
 }
