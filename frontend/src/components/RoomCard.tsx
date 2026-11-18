@@ -30,7 +30,7 @@ function RoomCard({ room }: RoomCardProps) {
             <p>{room.capacity} guests</p>
           </div>
         </div>
-        <BookingForm roomId={room.id} />
+        <BookingForm roomId={room.id} roomName={room.name} />
       </div>
     </article>
   );

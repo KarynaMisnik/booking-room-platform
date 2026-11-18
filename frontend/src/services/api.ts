@@ -20,6 +20,22 @@ export type CreateBookingRequest = {
   checkOut: string;
 };
 
+export type Booking = CreateBookingRequest & {
+  id: number;
+  status: string;
+  createdAt: string;
+};
+
+export class ApiError extends Error {
+  public readonly status: number;
+
+  constructor(status: number, message: string) {
+    super(message);
+    this.status = status;
+    this.name = "ApiError";
+  }
+}
+
 const apiBaseUrl = (
   import.meta.env.VITE_API_BASE_URL ?? "/api"
 ).replace(/\/$/, "");
@@ -34,7 +50,20 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
   });
 
   if (!response.ok) {
-    throw new Error(`API request failed with status ${response.status}`);
+    const responseText = await response.text();
+    let message = responseText;
+
+    try {
+      const body = JSON.parse(responseText) as { message?: string } | string;
+      message = typeof body === "string" ? body : body.message ?? responseText;
+    } catch {
+      // Keep the plain-text response when it is not JSON.
+    }
+
+    throw new ApiError(
+      response.status,
+      message || `API request failed with status ${response.status}`,
+    );
   }
 
   if (response.status === 204) {
@@ -60,8 +89,8 @@ export async function getRooms(): Promise<Room[]> {
 
 export async function createBooking(
   booking: CreateBookingRequest,
-): Promise<void> {
-  await request<unknown>("/bookings", {
+): Promise<Booking> {
+  return request<Booking>("/bookings", {
     method: "POST",
     body: JSON.stringify(booking),
   });
