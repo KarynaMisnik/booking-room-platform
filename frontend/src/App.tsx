@@ -16,9 +16,13 @@ function App() {
   }, []);
 
   return (
-    <main>
-      <h1>Hotel Rooms</h1>
-      {isLoading && <p role="status">Loading rooms...</p>}
+    <main className="app-main" aria-busy={isLoading}>
+      <header className="page-header">
+        <p className="page-header__eyebrow">Find your stay</p>
+        <h1>Hotel Rooms</h1>
+        <p>Choose a comfortable room for your next stay.</p>
+      </header>
+      {isLoading && <p className="loading-state" role="status"><span className="spinner" aria-hidden="true" />Loading rooms...</p>}
       {error && <p role="alert">{error}</p>}
       {!isLoading && !error && rooms.length === 0 && <p>No rooms available.</p>}
       <section className="rooms-grid" aria-label="Available hotel rooms">

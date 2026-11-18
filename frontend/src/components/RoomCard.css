@@ -1,15 +1,19 @@
-.room-card { overflow: hidden; border: 1px solid var(--border); border-radius: 18px; background: var(--bg); box-shadow: var(--shadow); text-align: left; }
+.room-card { overflow: hidden; border: 1px solid var(--border); border-radius: 18px; background: var(--bg); box-shadow: var(--shadow); text-align: left; transition: transform .2s ease, box-shadow .2s ease; }
+.room-card:hover { transform: translateY(-2px); box-shadow: 0 14px 28px rgba(0, 0, 0, .12); }
 .room-card__image { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; }
 .room-card__content { display: flex; flex-direction: column; gap: 20px; padding: 22px; }
 .room-card__eyebrow { margin-bottom: 6px; color: var(--accent); font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
 .room-card h2 { margin-bottom: 12px; }
 .room-card__details { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; color: var(--text); }
 .room-card__price strong { color: var(--text-h); font-size: 1.35rem; }
-.room-card form { display: grid; gap: 8px; }
+.room-card form { display: grid; gap: 8px; padding-top: 2px; }
 .room-card form h3 { margin: 0 0 4px; color: var(--text-h); font-size: 1rem; }
+.room-card form label { color: var(--text-h); font-size: .86rem; font-weight: 600; }
 .room-card form input { box-sizing: border-box; width: 100%; min-height: 38px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text-h); font: inherit; font-size: .9rem; }
 .room-card form button { min-height: 42px; margin-top: 6px; border: 0; border-radius: 8px; background: var(--accent); color: white; cursor: pointer; font: inherit; font-weight: 700; }
 .room-card form button:hover { filter: brightness(.92); }
+.room-card form button:focus-visible, .room-card form input:focus-visible { outline: 3px solid var(--accent-border); outline-offset: 2px; }
+.room-card form button:disabled { cursor: wait; opacity: .7; }
 .booking-confirmation { padding: 14px; border: 1px solid #86efac; border-radius: 10px; background: #f0fdf4; color: #166534; }
 .booking-confirmation h3 { margin: 0 0 6px; color: #166534; }
 .booking-confirmation p { margin-bottom: 10px; }

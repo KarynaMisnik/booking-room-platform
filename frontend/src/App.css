@@ -1,3 +1,13 @@
+.app-main { width: 100%; }
+.page-header { padding: 34px 24px 26px; text-align: center; }
+.page-header h1 { margin: 6px 0 8px; }
+.page-header > p:last-child { color: var(--text); }
+.page-header__eyebrow { color: var(--accent); font-size: .78rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+.loading-state { display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 44px; color: var(--text-h); }
+.spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: spin .7s linear infinite; }
+.spinner--button { width: 13px; height: 13px; border-width: 2px; vertical-align: -2px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
 .rooms-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
@@ -9,5 +19,6 @@
 }
 
 @media (max-width: 600px) {
+  .page-header { padding: 26px 18px 20px; }
   .rooms-grid { grid-template-columns: 1fr; padding: 0 16px 28px; }
 }

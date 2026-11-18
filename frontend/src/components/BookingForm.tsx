@@ -28,12 +28,14 @@ function BookingForm({ roomId, roomName }: BookingFormProps) {
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [confirmation, setConfirmation] = useState<Confirmation | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setMessage("");
     setErrorMessage("");
     setConfirmation(null);
+    setIsSubmitting(true);
 
     const booking = {
       roomId,
@@ -69,6 +71,8 @@ function BookingForm({ roomId, roomName }: BookingFormProps) {
       } else {
         setErrorMessage("We could not reach the booking service. Please try again later.");
       }
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -87,7 +91,7 @@ function BookingForm({ roomId, roomName }: BookingFormProps) {
         </section>
       )}
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} aria-busy={isSubmitting}>
       <h3>Book {roomName}</h3>
 
       <label htmlFor={`name-${roomId}`}>Guest name:</label>
@@ -97,6 +101,7 @@ function BookingForm({ roomId, roomName }: BookingFormProps) {
         value={guestName}
         onChange={(e) => setGuestName(e.target.value)}
         required
+        autoComplete="name"
       />
 
       <label htmlFor={`email-${roomId}`}>Email:</label>
@@ -106,6 +111,7 @@ function BookingForm({ roomId, roomName }: BookingFormProps) {
         value={guestEmail}
         onChange={(e) => setGuestEmail(e.target.value)}
         required
+        autoComplete="email"
       />
       <label htmlFor={`checkin-${roomId}`}>Check-in:</label>
       <input
@@ -124,7 +130,10 @@ function BookingForm({ roomId, roomName }: BookingFormProps) {
         onChange={(e) => setCheckOut(e.target.value)}
         required
       />
-      <button type="submit">Book room</button>
+      <button type="submit" disabled={isSubmitting}>
+        {isSubmitting && <span className="spinner spinner--button" aria-hidden="true" />}
+        {isSubmitting ? "Submitting..." : "Book room"}
+      </button>
       {!confirmation && errorMessage && <p className="booking-error" role="alert">{errorMessage}</p>}
       </form>
     </>
