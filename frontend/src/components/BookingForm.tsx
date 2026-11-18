@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from "react";
+import { createBooking } from "../services/api";
 
 type BookingFormProps = {
   roomId: number;
@@ -24,19 +25,8 @@ function BookingForm({ roomId }: BookingFormProps) {
     };
 
     try {
-      const response = await fetch("http://localhost:5000/api/bookings", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(booking),
-      });
-
-      if (response.ok) {
-        setMessage("Booking created successfully!");
-      } else {
-        setMessage("Booking failed. Please check your details.");
-      }
+      await createBooking(booking);
+      setMessage("Booking created successfully!");
     } catch (error) {
       console.error("Booking request failed:", error);
       setMessage("Cannot connect to the server. Please try again later.");

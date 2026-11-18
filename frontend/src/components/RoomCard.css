@@ -1,0 +1,13 @@
+.room-card { overflow: hidden; border: 1px solid var(--border); border-radius: 18px; background: var(--bg); box-shadow: var(--shadow); text-align: left; }
+.room-card__image { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; }
+.room-card__content { display: flex; flex-direction: column; gap: 20px; padding: 22px; }
+.room-card__eyebrow { margin-bottom: 6px; color: var(--accent); font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.room-card h2 { margin-bottom: 12px; }
+.room-card__details { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; color: var(--text); }
+.room-card__price strong { color: var(--text-h); font-size: 1.35rem; }
+.room-card form { display: grid; gap: 8px; }
+.room-card form h3 { margin: 0 0 4px; color: var(--text-h); font-size: 1rem; }
+.room-card form input { box-sizing: border-box; width: 100%; min-height: 38px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text-h); font: inherit; font-size: .9rem; }
+.room-card form button { min-height: 42px; margin-top: 6px; border: 0; border-radius: 8px; background: var(--accent); color: white; cursor: pointer; font: inherit; font-weight: 700; }
+.room-card form button:hover { filter: brightness(.92); }
+@media (max-width: 600px) { .room-card__content { padding: 18px; } }
