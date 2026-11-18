@@ -1,11 +1,11 @@
 # Image Credits
 
-The room images are local copies used for this frontend demo. Source pages:
+The room images are local 1200px-wide JPEG copies prepared for web use. Each source page identifies the photographer and states that the image is free to use under the Unsplash License.
 
-- Standard Room: [Empress Sepang Hotel](https://www.agoda.com/empress-sepang-hotel/hotel/kuala-lumpur-my.html)
-- Deluxe Room: [The Ritz-Carlton Kuala Lumpur](https://www.ritzcarlton.com/ja/hotels/kulrz-the-ritz-carlton-kuala-lumpur/photos/)
-- Family Room: [Brora Family Village](https://www.brorafamilyvillage.com/en/rooms)
-- Superior Room: [Delta Hotels by Marriott Heathrow Windsor](https://www.hotel.info/en/hotel/1471)
-- Luxury Suite: [Unsplash hotel suite photo](https://unsplash.com/photos/luxurious-hotel-suite-with-vintage-leather-furniture-and-chandelier-FQPQZmpwUkg)
-
-Confirm image usage rights and attribution requirements before deploying publicly.
+| File | Photographer | Source | License |
+| --- | --- | --- | --- |
+| `standard-room.jpg` | Jenevy Vergara (@jenevoo) | [Unsplash photo](https://unsplash.com/photos/a-hotel-room-with-a-tv-and-a-bed-8hGJaAJyzIg) | [Unsplash License](https://unsplash.com/license) |
+| `deluxe-room.jpg` | Dean Zhang (@startdig) | [Unsplash photo](https://unsplash.com/photos/a-neatly-made-hotel-bed-with-pillows-and-lamp-1EL9yeKl6fY) | [Unsplash License](https://unsplash.com/license) |
+| `family-room.jpg` | Meklay YOTKHAMSAY (@meklaymeklay) | [Unsplash photo](https://unsplash.com/photos/a-neatly-made-bed-in-a-modern-hotel-room-mNdhu5gl_P4) | [Unsplash License](https://unsplash.com/license) |
+| `superior-room.jpg` | Antonio Araujo (@antonioaaaraujo) | [Unsplash photo](https://unsplash.com/photos/a-well-lit-hotel-room-with-seating-and-a-desk-xQbmc2FnK3Y) | [Unsplash License](https://unsplash.com/license) |
+| `luxury-suite.jpg` | Aquilion Property (@aquilionproperty) | [Unsplash photo](https://unsplash.com/photos/a-hotel-room-with-a-bed-desk-chairs-and-a-television-1EJXSLUfqU0) | [Unsplash License](https://unsplash.com/license) |

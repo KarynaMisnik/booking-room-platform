@@ -1,24 +1,22 @@
 import BookingForm from "./BookingForm";
 import type { Room } from "../services/api";
-import standardRoomImage from "../assets/rooms/standard.jpg";
-import deluxeRoomImage from "../assets/rooms/deluxe.jpg";
-import familyRoomImage from "../assets/rooms/family.jpg";
-import superiorRoomImage from "../assets/rooms/superior.jpg";
-import luxurySuiteImage from "../assets/rooms/luxury-suite.jpg";
 import "./RoomCard.css";
 
 type RoomCardProps = { room: Room };
 
+const imageBaseUrl = (import.meta.env.VITE_IMAGE_BASE_URL ?? "").replace(/\/$/, "");
+
 const roomImages: Record<string, string> = {
-  "standard room": standardRoomImage,
-  "deluxe room": deluxeRoomImage,
-  "family room": familyRoomImage,
-  "superior room": superiorRoomImage,
-  "luxury suite": luxurySuiteImage,
+  "standard room": "standard-room.jpg",
+  "deluxe room": "deluxe-room.jpg",
+  "family room": "family-room.jpg",
+  "superior room": "superior-room.jpg",
+  "luxury suite": "luxury-suite.jpg",
 };
 
 function RoomCard({ room }: RoomCardProps) {
-  const image = roomImages[room.name.toLowerCase()] ?? standardRoomImage;
+  const imageFile = roomImages[room.name.toLowerCase()] ?? "standard-room.jpg";
+  const image = `${imageBaseUrl}/images/${imageFile}`;
 
   return (
     <article className="room-card">
