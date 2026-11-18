@@ -5,6 +5,7 @@ import { getRooms, type Room } from "./services/api";
 
 function App() {
   const [rooms, setRooms] = useState<Room[]>([]);
+  const [openRoomId, setOpenRoomId] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -26,7 +27,14 @@ function App() {
       {error && <p role="alert">{error}</p>}
       {!isLoading && !error && rooms.length === 0 && <p>No rooms available.</p>}
       <section className="rooms-grid" aria-label="Available hotel rooms">
-        {rooms.map((room) => <RoomCard key={room.id} room={room} />)}
+        {rooms.map((room) => (
+          <RoomCard
+            key={room.id}
+            room={room}
+            isBookingOpen={openRoomId === room.id}
+            onToggleBooking={() => setOpenRoomId((currentId) => currentId === room.id ? null : room.id)}
+          />
+        ))}
       </section>
     </main>
   );
