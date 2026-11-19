@@ -65,6 +65,12 @@ From the project root:
 docker build -t karynamisnik/hotel-backend:v1 ./backend
 ```
 
+Or
+
+```bash
+docker build -t muruseni/hotel-backend:v1 ./backend
+```
+
 **Explanation:**
 
 - `docker build` — creates a Docker image.
@@ -93,6 +99,12 @@ Push:
 docker push karynamisnik/hotel-backend:v1
 ```
 
+Or
+
+```bash
+docker push muruseni/hotel-backend:v1
+```
+
 The image is now available on Docker Hub.
 
 ---
@@ -113,6 +125,12 @@ Pull the image:
 docker pull karynamisnik/hotel-backend:v1
 ```
 
+Or
+
+```bash
+docker pull muruseni/hotel-backend:v1
+```
+
 **Explanation:**
 
 Another developer can now obtain the application from Docker Hub.
@@ -123,6 +141,12 @@ Another developer can now obtain the application from Docker Hub.
 
 ```bash
 docker create --name hotel-source-demo karynamisnik/hotel-backend:v1
+```
+
+Or
+
+```bash
+docker create --name hotel-source-demo muruseni/hotel-backend:v1
 ```
 
 **Explanation:**
