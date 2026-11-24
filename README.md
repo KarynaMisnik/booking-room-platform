@@ -26,8 +26,8 @@ The project uses a React frontend, an ASP.NET Core REST API, and a PostgreSQL da
   - [5. Verify the containers](#5-verify-the-containers)
   - [6. Stop the application](#6-stop-the-application)
   - [Database persistence](#database-persistence)
-- [Docker Hub — Development Workflow Demonstration](#docker-hub-development-workflow-demonstration)
-- [Docker Compose — Workflow Demonstration](#docker-compose-workflow-demonstration)
+- [Docker Hub: Development Workflow Demonstration](#docker-hub-development-workflow-demonstration)
+- [Docker Compose: Workflow Demonstration](#docker-compose-workflow-demonstration)
 
 ## Technology Stack
 
@@ -216,10 +216,10 @@ The data persists when containers are stopped or recreated.
 
 **Warning:** Running `docker compose down -v` also removes the database volume and deletes the stored database data.
 
-## Docker Hub — Development Workflow Demonstration
+## Docker Hub: Development Workflow Demonstration
 
 - [Docker Hub Demonstration Guide](Docker-demo.md)
 
-## Docker Compose — Workflow Demonstration
+## Docker Compose: Workflow Demonstration
 
-## - [Docker Compose Demonstration Guide](DockerCompose.md)
+- [Docker Compose Demonstration Guide](DockerCompose.md)

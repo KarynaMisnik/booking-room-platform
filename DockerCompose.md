@@ -20,8 +20,6 @@ Our configuration is stored in `compose.yaml`.
 
 ## 2. Show the Compose Configuration
 
-Open `compose.yaml` and briefly explain its structure.
-
 ### Backend
 
 ```yaml
@@ -90,6 +88,10 @@ The backend waits until PostgreSQL passes its health check before starting.
 
 ## 3. Build and Start the Application
 
+> Optionally: <code>docker compose down</code> - removes all Compose containers
+> <code>docker compose ps -a</code> - verifies that there is no Compose container
+> <code>docker compose up -d --build</code> - builds and starts everything
+
 Navigate to the project root containing `compose.yaml`.
 
 ```bash
@@ -143,6 +145,18 @@ The database port is available inside the Docker network and does not need to be
 
 ```bash
 curl -i http://localhost:5000/api/rooms
+```
+
+For Windows try:
+
+```powershell
+curl.exe -i http://localhost:5000/api/rooms
+```
+
+OR interactively:
+
+```bash
+docker compose exec db psql -U hoteluser -d hotelbooking
 ```
 
 **What it checks:**
@@ -213,6 +227,9 @@ The frontend displays information that originates from this database and is retr
 ---
 
 ## 8. Demonstrate Data Persistence (Optional)
+
+Create a new booking (please, no more 'test' input), show newly created booking
+<code> docker compose exec db psql -U hoteluser -d hotelbooking -c 'SELECT \* FROM "Bookings";'</code>
 
 Stop and remove the application's containers:
 
