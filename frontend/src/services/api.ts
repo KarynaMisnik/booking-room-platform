@@ -26,6 +26,10 @@ export type Booking = CreateBookingRequest & {
   createdAt: string;
 };
 
+export type BookingResponse = Omit<Booking, "createdAt"> & {
+  managementToken: string;
+};
+
 export class ApiError extends Error {
   public readonly status: number;
 
@@ -89,8 +93,8 @@ export async function getRooms(): Promise<Room[]> {
 
 export async function createBooking(
   booking: CreateBookingRequest,
-): Promise<Booking> {
-  return request<Booking>("/bookings", {
+): Promise<BookingResponse> {
+  return request<BookingResponse>("/bookings", {
     method: "POST",
     body: JSON.stringify(booking),
   });
