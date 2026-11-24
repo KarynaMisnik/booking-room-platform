@@ -30,7 +30,7 @@ services:
       POSTGRES_USER: hoteluser
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
     volumes:
-    # preserves database data when containers are removed
+    # directory inside the container where the volume is mounted
       - postgres_data:/var/lib/postgresql
     healthcheck:
     # checks whether PostgreSQL is ready to accept connections
@@ -38,6 +38,7 @@ services:
      interval: 5s
      timeout: 5s
      retries: 10
-
+# storage managed by Docker, exists independently of a container
+# volume preserves important data even when containers are deleted or recreated
 volumes:
   postgres_data:
