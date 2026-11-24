@@ -17,7 +17,7 @@ public class BookingsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Booking>> CreateBooking(
+    public async Task<ActionResult<BookingResponse>> CreateBooking(
     CreateBookingRequest request)
     {
         var booking = new Booking
@@ -34,6 +34,29 @@ public class BookingsController : ControllerBase
             var createdBooking = await _service.CreateBookingAsync(booking);
 
             return StatusCode(201, createdBooking);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Conflict(new { message = ex.Message });
+        }
+    }
+    [HttpPost("cancel")]
+    public async Task<IActionResult> CancelBooking(
+    CancelBookingRequest request)
+    {
+        try
+        {
+            await _service.CancelBookingAsync(request.ManagementToken);
+
+            return Ok(new { message = "Booking cancelled successfully." });
         }
         catch (ArgumentException ex)
         {

@@ -47,6 +47,9 @@ namespace backend.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("ManagementTokenHash")
+                        .HasColumnType("text");
+
                     b.Property<int>("RoomId")
                         .HasColumnType("integer");
 
