@@ -12,6 +12,7 @@ type Confirmation = {
   guestName: string;
   checkIn: string;
   checkOut: string;
+  managementToken: string;
 };
 
 function formatDate(date: string) {
@@ -53,6 +54,7 @@ function BookingForm({ roomId, roomName }: BookingFormProps) {
         guestName: savedBooking.guestName,
         checkIn: savedBooking.checkIn,
         checkOut: savedBooking.checkOut,
+        managementToken: savedBooking.managementToken,
       });
       setGuestName("");
       setGuestEmail("");
@@ -69,7 +71,9 @@ function BookingForm({ roomId, roomName }: BookingFormProps) {
         };
         setErrorMessage(messages[error.status] ?? error.message);
       } else {
-        setErrorMessage("We could not reach the booking service. Please try again later.");
+        setErrorMessage(
+          "We could not reach the booking service. Please try again later.",
+        );
       }
     } finally {
       setIsSubmitting(false);
@@ -79,62 +83,92 @@ function BookingForm({ roomId, roomName }: BookingFormProps) {
   return (
     <>
       {confirmation && (
-        <section className="booking-confirmation" role="status" aria-live="polite">
+        <section
+          className="booking-confirmation"
+          role="status"
+          aria-live="polite"
+        >
           <h3>Reservation confirmed</h3>
           <p>{message}</p>
           <dl>
-            <div><dt>Booking reference</dt><dd>#{confirmation.id}</dd></div>
-            <div><dt>Room</dt><dd>{confirmation.roomName}</dd></div>
-            <div><dt>Guest</dt><dd>{confirmation.guestName}</dd></div>
-            <div><dt>Dates</dt><dd>{formatDate(confirmation.checkIn)} – {formatDate(confirmation.checkOut)}</dd></div>
+            <div>
+              <dt>Booking reference</dt>
+              <dd>#{confirmation.id}</dd>
+            </div>
+            <div>
+              <dt>Room</dt>
+              <dd>{confirmation.roomName}</dd>
+            </div>
+            <div>
+              <dt>Guest</dt>
+              <dd>{confirmation.guestName}</dd>
+            </div>
+            <div>
+              <dt>Dates</dt>
+              <dd>
+                {formatDate(confirmation.checkIn)} –{" "}
+                {formatDate(confirmation.checkOut)}
+              </dd>
+            </div>
           </dl>
+          <p>Please save this private link to manage your reservation later.</p>
+
+          <a href={`/manage-booking#token=${confirmation.managementToken}`}>
+            Manage your reservation
+          </a>
         </section>
       )}
 
       <form onSubmit={handleSubmit} aria-busy={isSubmitting}>
-      <h3>Book {roomName}</h3>
+        <h3>Book {roomName}</h3>
 
-      <label htmlFor={`name-${roomId}`}>Guest name:</label>
-      <input
-        id={`name-${roomId}`}
-        type="text"
-        value={guestName}
-        onChange={(e) => setGuestName(e.target.value)}
-        required
-        autoComplete="name"
-      />
+        <label htmlFor={`name-${roomId}`}>Guest name:</label>
+        <input
+          id={`name-${roomId}`}
+          type="text"
+          value={guestName}
+          onChange={(e) => setGuestName(e.target.value)}
+          required
+          autoComplete="name"
+        />
 
-      <label htmlFor={`email-${roomId}`}>Email:</label>
-      <input
-        id={`email-${roomId}`}
-        type="email"
-        value={guestEmail}
-        onChange={(e) => setGuestEmail(e.target.value)}
-        required
-        autoComplete="email"
-      />
-      <label htmlFor={`checkin-${roomId}`}>Check-in:</label>
-      <input
-        id={`checkin-${roomId}`}
-        type="date"
-        value={checkIn}
-        onChange={(e) => setCheckIn(e.target.value)}
-        required
-      />
+        <label htmlFor={`email-${roomId}`}>Email:</label>
+        <input
+          id={`email-${roomId}`}
+          type="email"
+          value={guestEmail}
+          onChange={(e) => setGuestEmail(e.target.value)}
+          required
+          autoComplete="email"
+        />
+        <label htmlFor={`checkin-${roomId}`}>Check-in:</label>
+        <input
+          id={`checkin-${roomId}`}
+          type="date"
+          value={checkIn}
+          onChange={(e) => setCheckIn(e.target.value)}
+          required
+        />
 
-      <label htmlFor={`checkout-${roomId}`}>Check-out:</label>
-      <input
-        id={`checkout-${roomId}`}
-        type="date"
-        value={checkOut}
-        onChange={(e) => setCheckOut(e.target.value)}
-        required
-      />
-      <button type="submit" disabled={isSubmitting}>
-        {isSubmitting && <span className="spinner spinner--button" aria-hidden="true" />}
-        {isSubmitting ? "Submitting..." : "Book room"}
-      </button>
-      {!confirmation && errorMessage && <p className="booking-error" role="alert">{errorMessage}</p>}
+        <label htmlFor={`checkout-${roomId}`}>Check-out:</label>
+        <input
+          id={`checkout-${roomId}`}
+          type="date"
+          value={checkOut}
+          onChange={(e) => setCheckOut(e.target.value)}
+          required
+        />
+        <button type="submit" disabled={isSubmitting}>
+          {isSubmitting && (
+            <span className="spinner spinner--button" aria-hidden="true" />
+          )}
+          {isSubmitting ? "Submitting..." : "Book room"}
+        </button>
+        {!confirmation && errorMessage && (
+          <p className="booking-error" role="alert">
+            {errorMessage}
+          </p>
+        )}
       </form>
     </>
   );
