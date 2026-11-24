@@ -15,6 +15,8 @@ public class Booking
 
     public string GuestEmail { get; set; } = "";
 
+    public string? ManagementTokenHash { get; set; }
+
     public DateTime CheckIn { get; set; }
 
     public DateTime CheckOut { get; set; }
