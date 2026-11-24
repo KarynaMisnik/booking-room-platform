@@ -20,6 +20,10 @@ public class BookingService
     }
     public async Task<Booking> CreateBookingAsync(Booking booking)
     {
+        if (string.IsNullOrWhiteSpace(booking.GuestName))
+        {
+            throw new ArgumentException("Guest name is required.");
+        }
         if (!_validator.AreDatesValid(booking.CheckIn, booking.CheckOut))
         {
             throw new ArgumentException("Check-out must be after check-in.");

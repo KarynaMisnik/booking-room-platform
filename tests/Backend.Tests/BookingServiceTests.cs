@@ -399,4 +399,42 @@ public class BookingServiceTests
         Assert.Equal(2, await db.Bookings.CountAsync());
     }
 
+    // guest name validation
+    [Theory]
+    [InlineData("")]
+    [InlineData("   ")]
+    [InlineData(null)]
+    public async Task CreateBookingAsync_InvalidGuestName_DoesNotSaveBooking(
+    string? guestName)
+    {
+        // Arrange
+        using var connection = new SqliteConnection("Data Source=:memory:");
+        await connection.OpenAsync();
+
+        var options = new DbContextOptionsBuilder<AppDbContext>()
+            .UseSqlite(connection)
+            .Options;
+
+        await using var db = new AppDbContext(options);
+        await db.Database.EnsureCreatedAsync();
+
+        var service = new BookingService(db, new BookingValidator());
+
+        var booking = new Booking
+        {
+            RoomId = 1,
+            GuestName = guestName!,
+            GuestEmail = "guest@example.com",
+            CheckIn = new DateTime(2026, 12, 10, 0, 0, 0, DateTimeKind.Utc),
+            CheckOut = new DateTime(2026, 12, 12, 0, 0, 0, DateTimeKind.Utc)
+        };
+
+        // Act & Assert
+        var exception = await Assert.ThrowsAsync<ArgumentException>(
+            () => service.CreateBookingAsync(booking));
+
+        Assert.Equal("Guest name is required.", exception.Message);
+        Assert.Empty(await db.Bookings.ToListAsync());
+    }
+
 }
