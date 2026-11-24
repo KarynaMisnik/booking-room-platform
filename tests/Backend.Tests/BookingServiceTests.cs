@@ -400,10 +400,10 @@ public class BookingServiceTests
     }
 
     // guest name validation
-    [Theory]
-    [InlineData("")]
-    [InlineData("   ")]
-    [InlineData(null)]
+    [Theory] // allows the same test method to run with different input values
+    [InlineData("")] // supplies an input value for each test execution
+    [InlineData("   ")] // allows the parameter to contain null
+    [InlineData(null)] // suppresses the nullable warning because we intentionally test invalid input
     public async Task CreateBookingAsync_InvalidGuestName_DoesNotSaveBooking(
     string? guestName)
     {
