@@ -3,11 +3,18 @@ using backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using backend.DTOs;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Antiforgery;
 
 namespace backend.Controllers;
 
 [ApiController]
 [Route("api/admin/rooms")]
+[Authorize(Roles = "Admin")]
+[AutoValidateAntiforgeryToken]
+
 public class AdminRoomsController : ControllerBase
 {
     private readonly AppDbContext _context;
@@ -77,4 +84,31 @@ public class AdminRoomsController : ControllerBase
 
         return NoContent();
     }
+
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> DeleteRoom(int id)
+    {
+        var room = await _context.Rooms.FindAsync(id);
+
+        if (room == null)
+        {
+            return NotFound();
+        }
+
+        var hasBookings = await _context.Bookings
+            .AnyAsync(b => b.RoomId == id);
+
+        if (hasBookings)
+        {
+            return Conflict("Cannot delete a room with existing bookings.");
+        }
+
+        _context.Rooms.Remove(room);
+        await _context.SaveChangesAsync();
+
+        return NoContent();
+    }
+
+
+
 }

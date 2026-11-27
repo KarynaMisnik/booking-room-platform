@@ -10,6 +10,10 @@ services:
     # provides configuration, including database connection settings
      ASPNETCORE_ENVIRONMENT: Development
      ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Database=hotelbooking;Username=hoteluser;Password=${POSTGRES_PASSWORD}"
+     Admin__Username: ${ADMIN_USERNAME}
+     Admin__Password: ${ADMIN_PASSWORD}
+     Manager__Username: ${MANAGER_USERNAME}
+     Manager__Password: ${MANAGER_PASSWORD}
     depends_on:
     # controls service startup order
      db:
@@ -29,6 +33,7 @@ services:
       POSTGRES_DB: hotelbooking
       POSTGRES_USER: hoteluser
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+     
     volumes:
     # directory inside the container where the volume is mounted
       - postgres_data:/var/lib/postgresql

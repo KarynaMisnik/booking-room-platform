@@ -2,6 +2,8 @@ using backend.Data;
 using Microsoft.EntityFrameworkCore;
 using backend.Models;
 using backend.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args); // Data registration
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -26,9 +28,26 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddScoped<BookingValidator>();
 builder.Services.AddScoped<BookingService>();
-builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+builder.Services.AddControllersWithViews();
+// automatically validates antiforgery tokens for requests that can modify application state.
 builder.Services.AddOpenApi();
+
+builder.Services
+    .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme) // Registers the authentication mechanism
+    .AddCookie(options =>
+    {
+        options.Cookie.Name = "HotelStaffAuth"; // Defines the name of authentication cookie
+        options.Cookie.HttpOnly = true; // Prevents JavaScript from reading the cookie
+        options.ExpireTimeSpan = TimeSpan.FromHours(2);
+    });
+
+builder.Services.AddAuthorization(); // Enables permission and role checks
+
+// CSRF (Cross-Site Request Forgery) enabled
+builder.Services.AddAntiforgery(options =>
+{
+    options.HeaderName = "X-CSRF-TOKEN";
+});
 
 var app = builder.Build();
 
@@ -44,6 +63,7 @@ app.UseHttpsRedirection();
 
 app.UseCors("Frontend");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
